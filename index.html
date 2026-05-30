@@ -49,17 +49,17 @@
                 <div class="cards">
                     <div class="card available">
                         <p>Mesas disponibles</p>
-                        <h3>6</h3>
+                        <h3 id="total-disponibles">0</h3>
                     </div>
 
                     <div class="card occupied">
                         <p>Mesas ocupadas</p>
-                        <h3>2</h3>
+                        <h3 id="total-ocupadas">0</h3>
                     </div>
 
                     <div class="card reserved">
                         <p>Mesas reservadas</p>
-                        <h3>2</h3>
+                        <h3 id="total-reservadas">0</h3>
                     </div>
 
                     <div class="card neutral">
@@ -73,49 +73,49 @@
                     <section class="map-card">
                         <h3>Mapa de mesas</h3>
 
-                        <div class="tables-map">
-                            <button class="table available">M1</button>
-                            <button class="table available">M2</button>
-                            <button class="table reserved">M3</button>
-                            <button class="table available">M4</button>
-                            <button class="table occupied">M5</button>
-                            <button class="table available">M6</button>
-                            <button class="table reserved">M7</button>
-                            <button class="table available">M8</button>
-                            <button class="table available">M9</button>
-                            <button class="table occupied">M10</button>
-                        </div>
+                        <div class="tables-map" id="tables-map"></div>
+                        <button class="table available">M1</button>
+                        <button class="table available">M2</button>
+                        <button class="table reserved">M3</button>
+                        <button class="table available">M4</button>
+                        <button class="table occupied">M5</button>
+                        <button class="table available">M6</button>
+                        <button class="table reserved">M7</button>
+                        <button class="table available">M8</button>
+                        <button class="table available">M9</button>
+                        <button class="table occupied">M10</button>
+                </div>
 
-                        <div class="legend">
-                            <span><i class="dot available-dot"></i> Disponible</span>
-                            <span><i class="dot occupied-dot"></i> Ocupada</span>
-                            <span><i class="dot reserved-dot"></i> Reservada</span>
-                        </div>
-                    </section>
-
-                    <aside class="side-panel">
-                        <div class="panel">
-                            <h3>Próximas reservaciones</h3>
-                            <p>12:30 p. m. - María López - M3</p>
-                            <p>1:00 p. m. - Carlos Ramírez - M8</p>
-                            <p>1:30 p. m. - Ana Torres - M7</p>
-                        </div>
-
-                        <div class="panel">
-                            <h3>Acciones rápidas</h3>
-                            <button>Asignar mesa</button>
-                            <button>Nueva reservación</button>
-                            <button>Liberar mesa</button>
-                        </div>
-                    </aside>
-
+                <div class="legend">
+                    <span><i class="dot available-dot"></i> Disponible</span>
+                    <span><i class="dot occupied-dot"></i> Ocupada</span>
+                    <span><i class="dot reserved-dot"></i> Reservada</span>
                 </div>
             </section>
 
-        </main>
+            <aside class="side-panel">
+                <div class="panel">
+                    <h3>Próximas reservaciones</h3>
+                    <div id="lista-reservaciones"></div>
+                </div>
+
+                <div class="panel">
+                    <h3>Acciones rápidas</h3>
+                    <button>Asignar mesa</button>
+                    <button>Nueva reservación</button>
+                    <button>Liberar mesa</button>
+                </div>
+            </aside>
+
+    </div>
+    </section>
+
+    </main>
 
     </div>
 
+    <script src="js/data.js"></script>
+    <script src="js/ui.js"></script>
     <script src="js/app.js"></script>
 </body>
 

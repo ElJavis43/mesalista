@@ -1,9 +1,7 @@
-console.log("MesaLista iniciado correctamente");
+document.addEventListener("DOMContentLoaded", () => {
+    renderizarResumen();
+    renderizarMesas();
+    renderizarReservaciones();
 
-const mesas = document.querySelectorAll(".table");
-
-mesas.forEach((mesa) => {
-    mesa.addEventListener("click", () => {
-        alert(`Seleccionaste la mesa ${mesa.textContent}`);
-    });
+    console.log("MesaLista cargado correctamente");
 });
