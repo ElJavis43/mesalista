@@ -20,11 +20,11 @@
             </div>
 
             <nav class="menu">
-                <a href="#" class="menu-item">Inicio</a>
-                <a href="#" class="menu-item active">Mesas</a>
-                <a href="#" class="menu-item">Reservaciones</a>
-                <a href="#" class="menu-item">Reportes</a>
-                <a href="#" class="menu-item">Administración</a>
+                <a href="#" class="menu-item active" data-screen="pantalla-dashboard">Inicio</a>
+                <a href="#" class="menu-item" data-screen="pantalla-dashboard">Mesas</a>
+                <a href="#" class="menu-item" data-screen="pantalla-reservaciones">Reservaciones</a>
+                <a href="#" class="menu-item" data-screen="pantalla-reportes">Reportes</a>
+                <a href="#" class="menu-item" data-screen="pantalla-admin-mesas">Administración</a>
             </nav>
 
             <div class="update-box">
@@ -34,6 +34,25 @@
         </aside>
 
         <main class="main-content">
+            <section id="pantalla-dashboard" class="screen active-screen">
+                <!-- Aquí va el dashboard -->
+            </section>
+
+            <section id="pantalla-reservaciones" class="screen">
+                <!-- Aquí va la lista de reservaciones -->
+            </section>
+
+            <section id="pantalla-asignar" class="screen">
+                <!-- Aquí va asignar mesa -->
+            </section>
+
+            <section id="pantalla-admin-mesas" class="screen">
+                <!-- Aquí va administración de mesas -->
+            </section>
+
+            <section id="pantalla-reportes" class="screen">
+                <!-- Aquí van reportes -->
+            </section>
 
             <header class="topbar">
                 <input type="text" placeholder="Buscar reservación, cliente o mesa..." />
