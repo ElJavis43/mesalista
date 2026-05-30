@@ -14,18 +14,20 @@
     <div class="app">
 
         <aside class="sidebar">
-            <div class="logo">
-                <span class="logo-icon">▥</span>
-                <h1>MesaLista</h1>
-            </div>
+            <div>
+                <div class="logo">
+                    <span class="logo-icon">▥</span>
+                    <h1>MesaLista</h1>
+                </div>
 
-            <nav class="menu">
-                <a href="#" class="menu-item active" data-screen="pantalla-dashboard">Inicio</a>
-                <a href="#" class="menu-item" data-screen="pantalla-dashboard">Mesas</a>
-                <a href="#" class="menu-item" data-screen="pantalla-reservaciones">Reservaciones</a>
-                <a href="#" class="menu-item" data-screen="pantalla-reportes">Reportes</a>
-                <a href="#" class="menu-item" data-screen="pantalla-admin-mesas">Administración</a>
-            </nav>
+                <nav class="menu">
+                    <a href="#" class="menu-item active" data-screen="pantalla-dashboard">Inicio</a>
+                    <a href="#" class="menu-item" data-screen="pantalla-dashboard">Mesas</a>
+                    <a href="#" class="menu-item" data-screen="pantalla-reservaciones">Reservaciones</a>
+                    <a href="#" class="menu-item" data-screen="pantalla-reportes">Reportes</a>
+                    <a href="#" class="menu-item" data-screen="pantalla-admin-mesas">Administración</a>
+                </nav>
+            </div>
 
             <div class="update-box">
                 Última actualización<br>
@@ -34,102 +36,144 @@
         </aside>
 
         <main class="main-content">
-            <section id="pantalla-dashboard" class="screen active-screen">
-                <!-- Aquí va el dashboard -->
-            </section>
-
-            <section id="pantalla-reservaciones" class="screen">
-                <!-- Aquí va la lista de reservaciones -->
-            </section>
-
-            <section id="pantalla-asignar" class="screen">
-                <!-- Aquí va asignar mesa -->
-            </section>
-
-            <section id="pantalla-admin-mesas" class="screen">
-                <!-- Aquí va administración de mesas -->
-            </section>
-
-            <section id="pantalla-reportes" class="screen">
-                <!-- Aquí van reportes -->
-            </section>
 
             <header class="topbar">
                 <input type="text" placeholder="Buscar reservación, cliente o mesa..." />
+
                 <div class="user-info">
                     <span>Juan Pérez</span>
                     <small>Administrador</small>
                 </div>
             </header>
 
-            <section class="dashboard">
-                <h2>Dashboard / Mapa de mesas</h2>
+            <!-- PANTALLA: DASHBOARD -->
+            <section id="pantalla-dashboard" class="screen active-screen">
+                <section class="dashboard">
+                    <h2>Dashboard / Mapa de mesas</h2>
 
-                <div class="cards">
-                    <div class="card available">
-                        <p>Mesas disponibles</p>
-                        <h3 id="total-disponibles">0</h3>
+                    <div class="cards">
+                        <div class="card available">
+                            <p>Mesas disponibles</p>
+                            <h3 id="total-disponibles">0</h3>
+                        </div>
+
+                        <div class="card occupied">
+                            <p>Mesas ocupadas</p>
+                            <h3 id="total-ocupadas">0</h3>
+                        </div>
+
+                        <div class="card reserved">
+                            <p>Mesas reservadas</p>
+                            <h3 id="total-reservadas">0</h3>
+                        </div>
+
+                        <div class="card neutral">
+                            <p>Tiempo de espera</p>
+                            <h3>15 min</h3>
+                        </div>
                     </div>
 
-                    <div class="card occupied">
-                        <p>Mesas ocupadas</p>
-                        <h3 id="total-ocupadas">0</h3>
+                    <div class="content-grid">
+
+                        <section class="map-card">
+                            <h3>Mapa de mesas</h3>
+
+                            <div class="tables-map" id="tables-map"></div>
+
+                            <div class="legend">
+                                <span><i class="dot available-dot"></i> Disponible</span>
+                                <span><i class="dot occupied-dot"></i> Ocupada</span>
+                                <span><i class="dot reserved-dot"></i> Reservada</span>
+                            </div>
+                        </section>
+
+                        <aside class="side-panel">
+                            <div class="panel">
+                                <h3>Próximas reservaciones</h3>
+                                <div id="lista-reservaciones"></div>
+                            </div>
+
+                            <div class="panel">
+                                <h3>Acciones rápidas</h3>
+                                <button>Asignar mesa</button>
+                                <button>Nueva reservación</button>
+                                <button>Liberar mesa</button>
+                            </div>
+                        </aside>
+
+                    </div>
+                </section>
+            </section>
+
+            <!-- PANTALLA: RESERVACIONES -->
+            <section id="pantalla-reservaciones" class="screen">
+                <h2>Reservaciones</h2>
+
+                <div class="section-header">
+                    <p>Consulta, filtra y administra las reservaciones registradas.</p>
+                    <button class="primary-btn" id="btn-ir-nueva-reservacion">+ Nueva reservación</button>
+                </div>
+
+                <div class="filters-card">
+                    <div class="filter-group">
+                        <label>Fecha</label>
+                        <input type="date" id="filtro-fecha">
                     </div>
 
-                    <div class="card reserved">
-                        <p>Mesas reservadas</p>
-                        <h3 id="total-reservadas">0</h3>
+                    <div class="filter-group">
+                        <label>Estado</label>
+                        <select id="filtro-estado">
+                            <option value="todos">Todos</option>
+                            <option value="confirmada">Confirmada</option>
+                            <option value="en espera">En espera</option>
+                            <option value="cancelada">Cancelada</option>
+                        </select>
                     </div>
 
-                    <div class="card neutral">
-                        <p>Tiempo de espera</p>
-                        <h3>15 min</h3>
+                    <div class="filter-group large">
+                        <label>Búsqueda</label>
+                        <input type="text" id="filtro-busqueda" placeholder="Buscar cliente o mesa...">
                     </div>
                 </div>
 
-                <div class="content-grid">
+                <div class="table-card">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Fecha</th>
+                                <th>Hora</th>
+                                <th>Personas</th>
+                                <th>Mesa</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
 
-                    <section class="map-card">
-                        <h3>Mapa de mesas</h3>
-
-                        <div class="tables-map" id="tables-map"></div>
-                        <button class="table available">M1</button>
-                        <button class="table available">M2</button>
-                        <button class="table reserved">M3</button>
-                        <button class="table available">M4</button>
-                        <button class="table occupied">M5</button>
-                        <button class="table available">M6</button>
-                        <button class="table reserved">M7</button>
-                        <button class="table available">M8</button>
-                        <button class="table available">M9</button>
-                        <button class="table occupied">M10</button>
-                </div>
-
-                <div class="legend">
-                    <span><i class="dot available-dot"></i> Disponible</span>
-                    <span><i class="dot occupied-dot"></i> Ocupada</span>
-                    <span><i class="dot reserved-dot"></i> Reservada</span>
+                        <tbody id="tabla-reservaciones"></tbody>
+                    </table>
                 </div>
             </section>
 
-            <aside class="side-panel">
-                <div class="panel">
-                    <h3>Próximas reservaciones</h3>
-                    <div id="lista-reservaciones"></div>
-                </div>
+            <!-- PANTALLA: ASIGNAR MESA -->
+            <section id="pantalla-asignar" class="screen">
+                <h2>Asignar / Ocupar mesa</h2>
+                <p>Esta pantalla se desarrollará en el siguiente paso.</p>
+            </section>
 
-                <div class="panel">
-                    <h3>Acciones rápidas</h3>
-                    <button>Asignar mesa</button>
-                    <button>Nueva reservación</button>
-                    <button>Liberar mesa</button>
-                </div>
-            </aside>
+            <!-- PANTALLA: ADMINISTRACIÓN DE MESAS -->
+            <section id="pantalla-admin-mesas" class="screen">
+                <h2>Administración de mesas</h2>
+                <p>Esta pantalla se desarrollará más adelante.</p>
+            </section>
 
-    </div>
-    </section>
+            <!-- PANTALLA: REPORTES -->
+            <section id="pantalla-reportes" class="screen">
+                <h2>Reportes e historial</h2>
+                <p>Esta pantalla se desarrollará más adelante.</p>
+            </section>
 
-    </main>
+        </main>
 
     </div>
 

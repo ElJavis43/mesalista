@@ -63,24 +63,53 @@ const mesas = [
 
 const reservaciones = [
     {
+        id: 1,
         cliente: "María López",
+        telefono: "5551234567",
+        fecha: "2026-05-29",
         hora: "12:30 p. m.",
         personas: 4,
         mesa: "M3",
         estado: "confirmada"
     },
     {
+        id: 2,
         cliente: "Carlos Ramírez",
+        telefono: "5559876543",
+        fecha: "2026-05-29",
         hora: "1:00 p. m.",
         personas: 2,
         mesa: "M8",
         estado: "confirmada"
     },
     {
+        id: 3,
         cliente: "Ana Torres",
+        telefono: "5552345678",
+        fecha: "2026-05-29",
         hora: "1:30 p. m.",
         personas: 6,
         mesa: "M7",
+        estado: "en espera"
+    },
+    {
+        id: 4,
+        cliente: "Luis Hernández",
+        telefono: "5553456789",
+        fecha: "2026-05-30",
+        hora: "2:15 p. m.",
+        personas: 4,
+        mesa: "M1",
+        estado: "confirmada"
+    },
+    {
+        id: 5,
+        cliente: "Sofía Castillo",
+        telefono: "5554567890",
+        fecha: "2026-05-30",
+        hora: "3:00 p. m.",
+        personas: 3,
+        mesa: "M9",
         estado: "en espera"
     }
 ];

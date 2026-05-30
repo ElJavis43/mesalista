@@ -250,3 +250,118 @@ body {
     background: var(--terracota);
     color: white;
 }
+
+.screen {
+    display: none;
+}
+
+.active-screen {
+    display: block;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.section-header p {
+    color: var(--gris);
+}
+
+.primary-btn {
+    background: var(--terracota);
+    color: white;
+    border: none;
+    padding: 14px 20px;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.filters-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr 2fr;
+    gap: 18px;
+    background: white;
+    border: 1px solid var(--borde);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.filter-group label {
+    font-weight: bold;
+}
+
+.filter-group input,
+.filter-group select {
+    padding: 13px;
+    border: 1px solid var(--borde);
+    border-radius: 10px;
+    background: white;
+    color: var(--cafe);
+}
+
+.table-card {
+    background: white;
+    border: 1px solid var(--borde);
+    border-radius: 16px;
+    padding: 20px;
+    overflow-x: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td {
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--borde);
+}
+
+.data-table th {
+    color: var(--cafe);
+    font-weight: bold;
+}
+
+.estado-badge {
+    padding: 7px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.estado-confirmada {
+    background: rgba(107, 142, 78, 0.18);
+    color: var(--verde);
+}
+
+.estado-en-espera {
+    background: rgba(217, 164, 65, 0.22);
+    color: #9a6b16;
+}
+
+.estado-cancelada {
+    background: rgba(201, 76, 76, 0.18);
+    color: var(--rojo);
+}
+
+.action-btn {
+    border: 1px solid var(--borde);
+    background: white;
+    color: var(--cafe);
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+}

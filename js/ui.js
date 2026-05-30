@@ -58,3 +58,58 @@ function renderizarReservaciones() {
         contenedor.appendChild(item);
     });
 }
+
+function obtenerClaseEstadoReservacion(estado) {
+    if (estado === "confirmada") return "estado-confirmada";
+    if (estado === "en espera") return "estado-en-espera";
+    if (estado === "cancelada") return "estado-cancelada";
+    return "";
+}
+
+function renderizarTablaReservaciones(lista = reservaciones) {
+    const tabla = document.getElementById("tabla-reservaciones");
+
+    if (!tabla) return;
+
+    tabla.innerHTML = "";
+
+    lista.forEach((reservacion) => {
+        const fila = document.createElement("tr");
+
+        fila.innerHTML = `
+      <td>${reservacion.cliente}</td>
+      <td>${reservacion.fecha}</td>
+      <td>${reservacion.hora}</td>
+      <td>${reservacion.personas}</td>
+      <td>${reservacion.mesa}</td>
+      <td>
+        <span class="estado-badge ${obtenerClaseEstadoReservacion(reservacion.estado)}">
+          ${reservacion.estado}
+        </span>
+      </td>
+      <td>
+        <button class="action-btn" onclick="verReservacion(${reservacion.id})">
+          Ver
+        </button>
+      </td>
+    `;
+
+        tabla.appendChild(fila);
+    });
+}
+
+function verReservacion(id) {
+    const reservacion = reservaciones.find((item) => item.id === id);
+
+    if (!reservacion) return;
+
+    alert(
+        `Cliente: ${reservacion.cliente}\n` +
+        `Teléfono: ${reservacion.telefono}\n` +
+        `Fecha: ${reservacion.fecha}\n` +
+        `Hora: ${reservacion.hora}\n` +
+        `Personas: ${reservacion.personas}\n` +
+        `Mesa: ${reservacion.mesa}\n` +
+        `Estado: ${reservacion.estado}`
+    );
+}
