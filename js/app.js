@@ -1,17 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
-    renderizarResumen();
-    renderizarMesas();
-    renderizarReservaciones();
-    renderizarTablaReservaciones();
-
+    actualizarSistema();
     activarNavegacion();
+    activarBotones();
+    activarFormularioNuevaReservacion();
 
     console.log("MesaLista cargado correctamente");
 });
 
 function activarNavegacion() {
     const menuItems = document.querySelectorAll(".menu-item");
-    const screens = document.querySelectorAll(".screen");
 
     menuItems.forEach((item) => {
         item.addEventListener("click", (event) => {
@@ -19,23 +16,7 @@ function activarNavegacion() {
 
             const screenId = item.dataset.screen;
 
-            if (!screenId) {
-                console.warn("Este botón no tiene data-screen:", item);
-                return;
-            }
-
-            screens.forEach((screen) => {
-                screen.classList.remove("active-screen");
-            });
-
-            const pantallaSeleccionada = document.getElementById(screenId);
-
-            if (!pantallaSeleccionada) {
-                console.error("No existe una pantalla con el id:", screenId);
-                return;
-            }
-
-            pantallaSeleccionada.classList.add("active-screen");
+            cambiarPantalla(screenId);
 
             menuItems.forEach((menuItem) => {
                 menuItem.classList.remove("active");
@@ -44,4 +25,88 @@ function activarNavegacion() {
             item.classList.add("active");
         });
     });
+}
+
+function cambiarPantalla(screenId) {
+    const screens = document.querySelectorAll(".screen");
+    const pantallaSeleccionada = document.getElementById(screenId);
+
+    if (!screenId) {
+        console.error("No se recibió ningún ID de pantalla.");
+        return;
+    }
+
+    if (!pantallaSeleccionada) {
+        console.error("No existe una pantalla con este ID:", screenId);
+        return;
+    }
+
+    screens.forEach((screen) => {
+        screen.classList.remove("active-screen");
+    });
+
+    pantallaSeleccionada.classList.add("active-screen");
+
+    console.log("Pantalla activa:", screenId);
+}
+
+function activarBotones() {
+    const btnNuevaReservacion = document.getElementById("btn-ir-nueva-reservacion");
+    const btnNuevaRapida = document.getElementById("btn-ir-nueva-rapida");
+    const btnVolverReservaciones = document.getElementById("btn-volver-reservaciones");
+    const btnCancelarNueva = document.getElementById("btn-cancelar-nueva");
+    const btnAsignar = document.getElementById("btn-ir-asignar");
+
+    if (btnNuevaReservacion) {
+        btnNuevaReservacion.addEventListener("click", () => {
+            cambiarPantalla("pantalla-nueva-reservacion");
+        });
+    } else {
+        console.warn("No se encontró el botón btn-ir-nueva-reservacion");
+    }
+
+    if (btnNuevaRapida) {
+        btnNuevaRapida.addEventListener("click", () => {
+            cambiarPantalla("pantalla-nueva-reservacion");
+        });
+    }
+
+    if (btnVolverReservaciones) {
+        btnVolverReservaciones.addEventListener("click", () => {
+            cambiarPantalla("pantalla-reservaciones");
+        });
+    }
+
+    if (btnCancelarNueva) {
+        btnCancelarNueva.addEventListener("click", () => {
+            const form = document.getElementById("form-nueva-reservacion");
+
+            if (form) {
+                form.reset();
+            }
+
+            cambiarPantalla("pantalla-reservaciones");
+        });
+    }
+
+    if (btnAsignar) {
+        btnAsignar.addEventListener("click", () => {
+            cambiarPantalla("pantalla-asignar");
+        });
+    }
+}
+
+function activarFormularioNuevaReservacion() {
+    const form = document.getElementById("form-nueva-reservacion");
+    const inputPersonas = document.getElementById("personas");
+
+    if (form) {
+        form.addEventListener("submit", guardarNuevaReservacion);
+    } else {
+        console.warn("No se encontró el formulario form-nueva-reservacion");
+    }
+
+    if (inputPersonas) {
+        inputPersonas.addEventListener("input", actualizarSugerenciaMesa);
+    }
 }

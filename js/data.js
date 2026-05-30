@@ -7,13 +7,13 @@ const mesas = [
     },
     {
         id: "M2",
-        capacidad: 4,
-        zona: "Interior",
+        capacidad: 2,
+        zona: "Terraza",
         estado: "disponible"
     },
     {
         id: "M3",
-        capacidad: 4,
+        capacidad: 6,
         zona: "Interior",
         estado: "reservada"
     },
@@ -67,49 +67,54 @@ const reservaciones = [
         cliente: "María López",
         telefono: "5551234567",
         fecha: "2026-05-29",
-        hora: "12:30 p. m.",
+        hora: "12:30",
         personas: 4,
         mesa: "M3",
-        estado: "confirmada"
+        estado: "confirmada",
+        notas: ""
     },
     {
         id: 2,
         cliente: "Carlos Ramírez",
         telefono: "5559876543",
         fecha: "2026-05-29",
-        hora: "1:00 p. m.",
+        hora: "13:00",
         personas: 2,
         mesa: "M8",
-        estado: "confirmada"
+        estado: "confirmada",
+        notas: ""
     },
     {
         id: 3,
         cliente: "Ana Torres",
         telefono: "5552345678",
         fecha: "2026-05-29",
-        hora: "1:30 p. m.",
+        hora: "13:30",
         personas: 6,
         mesa: "M7",
-        estado: "en espera"
+        estado: "en espera",
+        notas: ""
     },
     {
         id: 4,
         cliente: "Luis Hernández",
         telefono: "5553456789",
         fecha: "2026-05-30",
-        hora: "2:15 p. m.",
+        hora: "14:15",
         personas: 4,
         mesa: "M1",
-        estado: "confirmada"
+        estado: "confirmada",
+        notas: ""
     },
     {
         id: 5,
         cliente: "Sofía Castillo",
         telefono: "5554567890",
         fecha: "2026-05-30",
-        hora: "3:00 p. m.",
+        hora: "15:00",
         personas: 3,
         mesa: "M9",
-        estado: "en espera"
+        estado: "en espera",
+        notas: ""
     }
 ];

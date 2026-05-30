@@ -95,8 +95,8 @@
 
                             <div class="panel">
                                 <h3>Acciones rápidas</h3>
-                                <button>Asignar mesa</button>
-                                <button>Nueva reservación</button>
+                                <button id="btn-ir-asignar">Asignar mesa</button>
+                                <button id="btn-ir-nueva-rapida">Nueva reservación</button>
                                 <button>Liberar mesa</button>
                             </div>
                         </aside>
@@ -152,6 +152,84 @@
 
                         <tbody id="tabla-reservaciones"></tbody>
                     </table>
+                </div>
+            </section>
+
+            <!-- PANTALLA: NUEVA RESERVACIÓN -->
+            <section id="pantalla-nueva-reservacion" class="screen">
+                <h2>Nueva reservación</h2>
+
+                <div class="section-header">
+                    <p>Registra una nueva reservación y asigna una mesa disponible.</p>
+                    <button class="secondary-btn" id="btn-volver-reservaciones">Volver a reservaciones</button>
+                </div>
+
+                <div class="form-layout">
+
+                    <form class="form-card" id="form-nueva-reservacion">
+
+                        <div class="form-group">
+                            <label for="cliente">Nombre del cliente</label>
+                            <input type="text" id="cliente" placeholder="Ej. María López" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="telefono">Teléfono</label>
+                            <input type="text" id="telefono" placeholder="Ej. 5551234567" required>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="fecha">Fecha</label>
+                                <input type="date" id="fecha" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="hora">Hora</label>
+                                <input type="time" id="hora" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="personas">Número de personas</label>
+                            <input type="number" id="personas" min="1" placeholder="Ej. 4" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="mesa">Mesa asignada</label>
+                            <select id="mesa" required>
+                                <option value="">Selecciona una mesa</option>
+                            </select>
+                        </div>
+
+                        <div class="suggestion-box" id="mesa-sugerida">
+                            Ingresa el número de personas para sugerir una mesa.
+                        </div>
+
+                        <div class="form-group">
+                            <label for="notas">Notas opcionales</label>
+                            <textarea id="notas" placeholder="Agrega alguna nota adicional..."></textarea>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="primary-btn">Guardar reservación</button>
+                            <button type="button" class="secondary-btn" id="btn-cancelar-nueva">Cancelar</button>
+                        </div>
+
+                    </form>
+
+                    <aside class="map-card mini-map-card">
+                        <h3>Mesas disponibles</h3>
+
+                        <div class="tables-map mini-map" id="mini-map-reservacion"></div>
+
+                        <div class="legend">
+                            <span><i class="dot available-dot"></i> Disponible</span>
+                            <span><i class="dot occupied-dot"></i> Ocupada</span>
+                            <span><i class="dot reserved-dot"></i> Reservada</span>
+                        </div>
+                    </aside>
+
                 </div>
             </section>
 

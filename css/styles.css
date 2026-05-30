@@ -83,6 +83,7 @@ body {
 .main-content {
     flex: 1;
     padding: 25px 35px;
+    overflow-x: hidden;
 }
 
 .topbar {
@@ -106,7 +107,16 @@ body {
     text-align: right;
 }
 
-.dashboard h2 {
+.screen {
+    display: none;
+}
+
+.active-screen {
+    display: block;
+}
+
+.dashboard h2,
+.screen h2 {
     font-size: 34px;
     margin-bottom: 20px;
 }
@@ -153,7 +163,10 @@ body {
 }
 
 .map-card,
-.panel {
+.panel,
+.form-card,
+.table-card,
+.filters-card {
     background: white;
     border: 1px solid var(--borde);
     border-radius: 16px;
@@ -198,10 +211,15 @@ body {
     color: var(--cafe);
 }
 
+.table.neutral {
+    background: var(--gris);
+}
+
 .legend {
     margin-top: 20px;
     display: flex;
     gap: 20px;
+    flex-wrap: wrap;
 }
 
 .dot {
@@ -251,14 +269,6 @@ body {
     color: white;
 }
 
-.screen {
-    display: none;
-}
-
-.active-screen {
-    display: block;
-}
-
 .section-header {
     display: flex;
     justify-content: space-between;
@@ -280,41 +290,54 @@ body {
     cursor: pointer;
 }
 
+.secondary-btn {
+    background: white;
+    color: var(--terracota);
+    border: 1px solid var(--terracota);
+    padding: 14px 20px;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
 .filters-card {
     display: grid;
     grid-template-columns: 1fr 1fr 2fr;
     gap: 18px;
-    background: white;
-    border: 1px solid var(--borde);
-    border-radius: 16px;
-    padding: 20px;
     margin-bottom: 20px;
 }
 
-.filter-group {
+.filter-group,
+.form-group {
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
-.filter-group label {
+.filter-group label,
+.form-group label {
     font-weight: bold;
 }
 
 .filter-group input,
-.filter-group select {
+.filter-group select,
+.form-group input,
+.form-group select,
+.form-group textarea {
     padding: 13px;
     border: 1px solid var(--borde);
     border-radius: 10px;
     background: white;
     color: var(--cafe);
+    font-family: Arial, sans-serif;
+}
+
+.form-group textarea {
+    min-height: 100px;
+    resize: vertical;
 }
 
 .table-card {
-    background: white;
-    border: 1px solid var(--borde);
-    border-radius: 16px;
-    padding: 20px;
     overflow-x: auto;
 }
 
@@ -364,4 +387,78 @@ body {
     padding: 8px 12px;
     border-radius: 8px;
     cursor: pointer;
+}
+
+.form-layout {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 20px;
+}
+
+.form-card {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+.suggestion-box {
+    background: rgba(107, 142, 78, 0.12);
+    border: 1px solid rgba(107, 142, 78, 0.35);
+    color: var(--verde);
+    padding: 14px;
+    border-radius: 12px;
+    font-weight: bold;
+}
+
+.form-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.mini-map-card {
+    height: fit-content;
+}
+
+.mini-map {
+    grid-template-columns: repeat(2, 110px);
+    gap: 18px;
+}
+
+@media (max-width: 1000px) {
+    .app {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        gap: 20px;
+    }
+
+    .cards,
+    .content-grid,
+    .form-layout,
+    .filters-card {
+        grid-template-columns: 1fr;
+    }
+
+    .topbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+    }
+
+    .topbar input {
+        width: 100%;
+    }
+
+    .tables-map {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
