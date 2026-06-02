@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
     activarNavegacion();
     activarBotones();
     activarFormularioNuevaReservacion();
+    activarFormularioAsignarMesa();
 
     console.log("MesaLista cargado correctamente");
 });
@@ -55,14 +56,15 @@ function activarBotones() {
     const btnNuevaRapida = document.getElementById("btn-ir-nueva-rapida");
     const btnVolverReservaciones = document.getElementById("btn-volver-reservaciones");
     const btnCancelarNueva = document.getElementById("btn-cancelar-nueva");
+
     const btnAsignar = document.getElementById("btn-ir-asignar");
+    const btnVolverDashboard = document.getElementById("btn-volver-dashboard");
+    const btnCancelarAsignar = document.getElementById("btn-cancelar-asignar");
 
     if (btnNuevaReservacion) {
         btnNuevaReservacion.addEventListener("click", () => {
             cambiarPantalla("pantalla-nueva-reservacion");
         });
-    } else {
-        console.warn("No se encontró el botón btn-ir-nueva-reservacion");
     }
 
     if (btnNuevaRapida) {
@@ -94,6 +96,24 @@ function activarBotones() {
             cambiarPantalla("pantalla-asignar");
         });
     }
+
+    if (btnVolverDashboard) {
+        btnVolverDashboard.addEventListener("click", () => {
+            cambiarPantalla("pantalla-dashboard");
+        });
+    }
+
+    if (btnCancelarAsignar) {
+        btnCancelarAsignar.addEventListener("click", () => {
+            const form = document.getElementById("form-asignar-mesa");
+
+            if (form) {
+                form.reset();
+            }
+
+            cambiarPantalla("pantalla-dashboard");
+        });
+    }
 }
 
 function activarFormularioNuevaReservacion() {
@@ -102,11 +122,22 @@ function activarFormularioNuevaReservacion() {
 
     if (form) {
         form.addEventListener("submit", guardarNuevaReservacion);
-    } else {
-        console.warn("No se encontró el formulario form-nueva-reservacion");
     }
 
     if (inputPersonas) {
         inputPersonas.addEventListener("input", actualizarSugerenciaMesa);
+    }
+}
+
+function activarFormularioAsignarMesa() {
+    const form = document.getElementById("form-asignar-mesa");
+    const inputPersonas = document.getElementById("personas-asignar");
+
+    if (form) {
+        form.addEventListener("submit", guardarAsignacionMesa);
+    }
+
+    if (inputPersonas) {
+        inputPersonas.addEventListener("input", actualizarSugerenciaAsignar);
     }
 }

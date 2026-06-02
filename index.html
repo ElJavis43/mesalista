@@ -31,7 +31,7 @@
 
             <div class="update-box">
                 Última actualización<br>
-                <strong>10:25 a. m.</strong>
+                <strong id="ultima-actualizacion">10:25 a. m.</strong>
             </div>
         </aside>
 
@@ -97,7 +97,7 @@
                                 <h3>Acciones rápidas</h3>
                                 <button id="btn-ir-asignar">Asignar mesa</button>
                                 <button id="btn-ir-nueva-rapida">Nueva reservación</button>
-                                <button>Liberar mesa</button>
+                                <button id="btn-liberar-rapido">Liberar mesa</button>
                             </div>
                         </aside>
 
@@ -236,7 +236,57 @@
             <!-- PANTALLA: ASIGNAR MESA -->
             <section id="pantalla-asignar" class="screen">
                 <h2>Asignar / Ocupar mesa</h2>
-                <p>Esta pantalla se desarrollará en el siguiente paso.</p>
+
+                <div class="section-header">
+                    <p>Selecciona una mesa disponible y registra cuántas personas la ocuparán.</p>
+                    <button class="secondary-btn" id="btn-volver-dashboard">Volver al dashboard</button>
+                </div>
+
+                <div class="form-layout">
+
+                    <form class="form-card" id="form-asignar-mesa">
+
+                        <div class="form-group">
+                            <label for="mesa-asignar">Mesa disponible</label>
+                            <select id="mesa-asignar" required>
+                                <option value="">Selecciona una mesa</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="personas-asignar">Número de personas</label>
+                            <input type="number" id="personas-asignar" min="1" placeholder="Ej. 4" required>
+                        </div>
+
+                        <div class="suggestion-box" id="sugerencia-asignar">
+                            Ingresa el número de personas para sugerir una mesa disponible.
+                        </div>
+
+                        <div class="form-group">
+                            <label for="notas-asignar">Notas opcionales</label>
+                            <textarea id="notas-asignar" placeholder="Ej. Cliente llegó sin reservación."></textarea>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="primary-btn">Confirmar ocupación</button>
+                            <button type="button" class="secondary-btn" id="btn-cancelar-asignar">Cancelar</button>
+                        </div>
+
+                    </form>
+
+                    <aside class="map-card mini-map-card">
+                        <h3>Mapa de mesas</h3>
+
+                        <div class="tables-map mini-map" id="mini-map-asignar"></div>
+
+                        <div class="legend">
+                            <span><i class="dot available-dot"></i> Disponible</span>
+                            <span><i class="dot occupied-dot"></i> Ocupada</span>
+                            <span><i class="dot reserved-dot"></i> Reservada</span>
+                        </div>
+                    </aside>
+
+                </div>
             </section>
 
             <!-- PANTALLA: ADMINISTRACIÓN DE MESAS -->
