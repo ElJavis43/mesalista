@@ -277,6 +277,24 @@ function renderizarMiniMapaLiberar() {
     });
 }
 
+function renderizarMiniMapaAdmin() {
+    const contenedor = document.getElementById("mini-map-admin");
+
+    if (!contenedor) return;
+
+    contenedor.innerHTML = "";
+
+    mesas.forEach((mesa) => {
+        const botonMesa = crearBotonMesa(mesa);
+
+        botonMesa.addEventListener("click", () => {
+            cargarMesaEnFormulario(mesa.id);
+        });
+
+        contenedor.appendChild(botonMesa);
+    });
+}
+
 function sugerirMesaDisponible(personas) {
     const mesasDisponibles = mesas
         .filter((mesa) => mesa.estado === "disponible" && mesa.capacidad >= personas)
@@ -501,6 +519,191 @@ function guardarLiberacionMesa(event) {
     alert(`La mesa ${mesa.id} fue liberada correctamente.`);
 }
 
+function renderizarTablaAdminMesas() {
+    const tabla = document.getElementById("tabla-admin-mesas");
+
+    if (!tabla) return;
+
+    tabla.innerHTML = "";
+
+    mesas.forEach((mesa) => {
+        const fila = document.createElement("tr");
+
+        fila.innerHTML = `
+      <td>${mesa.id}</td>
+      <td>${mesa.capacidad} personas</td>
+      <td>${mesa.zona}</td>
+      <td>
+        <span class="estado-badge ${obtenerClaseEstadoAdmin(mesa.estado)}">
+          ${mesa.estado}
+        </span>
+      </td>
+      <td>
+        <button class="action-btn" onclick="cargarMesaEnFormulario('${mesa.id}')">Editar</button>
+        <button class="action-btn danger-action" onclick="eliminarMesa('${mesa.id}')">Eliminar</button>
+      </td>
+    `;
+
+        tabla.appendChild(fila);
+    });
+}
+
+function obtenerClaseEstadoAdmin(estado) {
+    if (estado === "disponible") return "estado-confirmada";
+    if (estado === "reservada") return "estado-en-espera";
+    if (estado === "ocupada") return "estado-cancelada";
+    return "";
+}
+
+function guardarMesaAdmin(event) {
+    event.preventDefault();
+
+    const modo = document.getElementById("modo-edicion-mesa").value;
+    const id = document.getElementById("admin-mesa-id").value.trim().toUpperCase();
+    const capacidad = Number(document.getElementById("admin-mesa-capacidad").value);
+    const zona = document.getElementById("admin-mesa-zona").value;
+    const estado = document.getElementById("admin-mesa-estado").value;
+    const descripcion = document.getElementById("admin-mesa-descripcion").value.trim();
+
+    if (!id || !capacidad || !zona || !estado) {
+        alert("Completa los campos obligatorios de la mesa.");
+        return;
+    }
+
+    if (modo === "nuevo") {
+        const existe = mesas.some((mesa) => mesa.id === id);
+
+        if (existe) {
+            alert("Ya existe una mesa con ese número.");
+            return;
+        }
+
+        mesas.push({
+            id: id,
+            capacidad: capacidad,
+            zona: zona,
+            estado: estado,
+            descripcion: descripcion,
+            personasActuales: estado === "ocupada" ? capacidad : 0
+        });
+
+        alert("Mesa agregada correctamente.");
+    } else {
+        const mesa = mesas.find((item) => item.id === modo);
+
+        if (!mesa) {
+            alert("No se encontró la mesa a editar.");
+            return;
+        }
+
+        const idDuplicado = mesas.some((item) => item.id === id && item.id !== modo);
+
+        if (idDuplicado) {
+            alert("Ya existe otra mesa con ese número.");
+            return;
+        }
+
+        mesa.id = id;
+        mesa.capacidad = capacidad;
+        mesa.zona = zona;
+        mesa.estado = estado;
+        mesa.descripcion = descripcion;
+
+        if (estado !== "ocupada") {
+            mesa.personasActuales = 0;
+        }
+
+        reservaciones.forEach((reservacion) => {
+            if (reservacion.mesa === modo) {
+                reservacion.mesa = id;
+            }
+        });
+
+        alert("Mesa editada correctamente.");
+    }
+
+    limpiarFormularioMesa();
+    actualizarSistema();
+}
+
+function cargarMesaEnFormulario(id) {
+    const mesa = mesas.find((item) => item.id === id);
+
+    if (!mesa) return;
+
+    cambiarPantalla("pantalla-admin-mesas");
+
+    document.getElementById("modo-edicion-mesa").value = mesa.id;
+    document.getElementById("admin-mesa-id").value = mesa.id;
+    document.getElementById("admin-mesa-capacidad").value = mesa.capacidad;
+    document.getElementById("admin-mesa-zona").value = mesa.zona;
+    document.getElementById("admin-mesa-estado").value = mesa.estado;
+    document.getElementById("admin-mesa-descripcion").value = mesa.descripcion || "";
+
+    const botonGuardar = document.getElementById("btn-guardar-mesa");
+
+    if (botonGuardar) {
+        botonGuardar.textContent = "Guardar cambios";
+    }
+}
+
+function eliminarMesa(id) {
+    const mesa = mesas.find((item) => item.id === id);
+
+    if (!mesa) return;
+
+    const tieneReservaciones = reservaciones.some((reservacion) => reservacion.mesa === id);
+
+    if (tieneReservaciones) {
+        const confirmarReservaciones = confirm(
+            `La mesa ${id} tiene reservaciones asociadas. ` +
+            `Si la eliminas, esas reservaciones quedarán sin mesa. ¿Deseas continuar?`
+        );
+
+        if (!confirmarReservaciones) return;
+
+        reservaciones.forEach((reservacion) => {
+            if (reservacion.mesa === id) {
+                reservacion.mesa = "Sin asignar";
+            }
+        });
+    }
+
+    const confirmar = confirm(`¿Deseas eliminar la mesa ${id}?`);
+
+    if (!confirmar) return;
+
+    const indice = mesas.findIndex((item) => item.id === id);
+
+    if (indice !== -1) {
+        mesas.splice(indice, 1);
+    }
+
+    limpiarFormularioMesa();
+    actualizarSistema();
+
+    alert("Mesa eliminada correctamente.");
+}
+
+function limpiarFormularioMesa() {
+    const form = document.getElementById("form-admin-mesa");
+
+    if (form) {
+        form.reset();
+    }
+
+    const modo = document.getElementById("modo-edicion-mesa");
+    const botonGuardar = document.getElementById("btn-guardar-mesa");
+
+    if (modo) {
+        modo.value = "nuevo";
+    }
+
+    if (botonGuardar) {
+        botonGuardar.textContent = "Guardar mesa";
+    }
+}
+
 function actualizarSistema() {
     renderizarResumen();
     renderizarMesas();
@@ -512,5 +715,7 @@ function actualizarSistema() {
     renderizarMiniMapaReservacion();
     renderizarMiniMapaAsignar();
     renderizarMiniMapaLiberar();
+    renderizarMiniMapaAdmin();
+    renderizarTablaAdminMesas();
     actualizarHora();
 }

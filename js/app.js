@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     activarFormularioNuevaReservacion();
     activarFormularioAsignarMesa();
     activarFormularioLiberarMesa();
+    activarFormularioAdminMesas();
 
     console.log("MesaLista cargado correctamente");
 });
@@ -65,6 +66,9 @@ function activarBotones() {
     const btnLiberarRapido = document.getElementById("btn-liberar-rapido");
     const btnVolverDashboardLiberar = document.getElementById("btn-volver-dashboard-liberar");
     const btnCancelarLiberar = document.getElementById("btn-cancelar-liberar");
+
+    const btnLimpiarMesa = document.getElementById("btn-limpiar-form-mesa");
+    const btnCancelarEdicionMesa = document.getElementById("btn-cancelar-edicion-mesa");
 
     if (btnNuevaReservacion) {
         btnNuevaReservacion.addEventListener("click", () => {
@@ -143,6 +147,14 @@ function activarBotones() {
             cambiarPantalla("pantalla-dashboard");
         });
     }
+
+    if (btnLimpiarMesa) {
+        btnLimpiarMesa.addEventListener("click", limpiarFormularioMesa);
+    }
+
+    if (btnCancelarEdicionMesa) {
+        btnCancelarEdicionMesa.addEventListener("click", limpiarFormularioMesa);
+    }
 }
 
 function activarFormularioNuevaReservacion() {
@@ -181,5 +193,13 @@ function activarFormularioLiberarMesa() {
 
     if (selectMesa) {
         selectMesa.addEventListener("change", actualizarDetalleLiberar);
+    }
+}
+
+function activarFormularioAdminMesas() {
+    const form = document.getElementById("form-admin-mesa");
+
+    if (form) {
+        form.addEventListener("submit", guardarMesaAdmin);
     }
 }

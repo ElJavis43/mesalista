@@ -468,3 +468,16 @@ body {
         grid-template-columns: repeat(2, 1fr);
     }
 }
+
+.admin-table-space {
+    margin-top: 20px;
+}
+
+.danger-action {
+    color: var(--rojo);
+    border-color: rgba(201, 76, 76, 0.4);
+}
+
+.danger-action:hover {
+    background: rgba(201, 76, 76, 0.12);
+}
