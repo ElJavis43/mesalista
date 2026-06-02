@@ -36,6 +36,16 @@ function renderizarResumen() {
     if (totalReservadas) totalReservadas.textContent = reservadas;
 }
 
+function crearBotonMesa(mesa) {
+    const botonMesa = document.createElement("button");
+
+    botonMesa.className = `table ${obtenerClaseEstado(mesa.estado)}`;
+    botonMesa.textContent = mesa.id;
+    botonMesa.title = `${mesa.id} | ${mesa.capacidad} personas | ${mesa.zona} | ${mesa.estado}`;
+
+    return botonMesa;
+}
+
 function renderizarMesas() {
     const contenedorMesas = document.getElementById("tables-map");
 
@@ -54,22 +64,15 @@ function renderizarMesas() {
     });
 }
 
-function crearBotonMesa(mesa) {
-    const botonMesa = document.createElement("button");
-
-    botonMesa.className = `table ${obtenerClaseEstado(mesa.estado)}`;
-    botonMesa.textContent = mesa.id;
-    botonMesa.title = `${mesa.id} | ${mesa.capacidad} personas | ${mesa.zona} | ${mesa.estado}`;
-
-    return botonMesa;
-}
-
 function mostrarDetalleMesa(mesa) {
+    const personas = mesa.personasActuales ? `\nPersonas actuales: ${mesa.personasActuales}` : "";
+
     alert(
         `Mesa: ${mesa.id}\n` +
         `Capacidad: ${mesa.capacidad} personas\n` +
         `Zona: ${mesa.zona}\n` +
-        `Estado: ${mesa.estado}`
+        `Estado: ${mesa.estado}` +
+        personas
     );
 }
 
@@ -183,6 +186,24 @@ function renderizarSelectAsignarMesa() {
     });
 }
 
+function renderizarSelectLiberarMesa() {
+    const selectMesa = document.getElementById("mesa-liberar");
+
+    if (!selectMesa) return;
+
+    selectMesa.innerHTML = '<option value="">Selecciona una mesa ocupada</option>';
+
+    const mesasOcupadas = mesas.filter((mesa) => mesa.estado === "ocupada");
+
+    mesasOcupadas.forEach((mesa) => {
+        const opcion = document.createElement("option");
+        opcion.value = mesa.id;
+        opcion.textContent = `${mesa.id} - ${mesa.capacidad} personas - ${mesa.zona}`;
+
+        selectMesa.appendChild(opcion);
+    });
+}
+
 function renderizarMiniMapaReservacion() {
     const contenedor = document.getElementById("mini-map-reservacion");
 
@@ -225,6 +246,31 @@ function renderizarMiniMapaAsignar() {
 
             const selectMesa = document.getElementById("mesa-asignar");
             selectMesa.value = mesa.id;
+        });
+
+        contenedor.appendChild(botonMesa);
+    });
+}
+
+function renderizarMiniMapaLiberar() {
+    const contenedor = document.getElementById("mini-map-liberar");
+
+    if (!contenedor) return;
+
+    contenedor.innerHTML = "";
+
+    mesas.forEach((mesa) => {
+        const botonMesa = crearBotonMesa(mesa);
+
+        botonMesa.addEventListener("click", () => {
+            if (mesa.estado !== "ocupada") {
+                alert("Solo puedes liberar mesas ocupadas.");
+                return;
+            }
+
+            const selectMesa = document.getElementById("mesa-liberar");
+            selectMesa.value = mesa.id;
+            actualizarDetalleLiberar();
         });
 
         contenedor.appendChild(botonMesa);
@@ -295,6 +341,25 @@ function actualizarSugerenciaAsignar() {
         `Mesa sugerida: ${mesaSugerida.id} | Capacidad: ${mesaSugerida.capacidad} personas | Zona: ${mesaSugerida.zona}`;
 
     selectMesa.value = mesaSugerida.id;
+}
+
+function actualizarDetalleLiberar() {
+    const selectMesa = document.getElementById("mesa-liberar");
+    const detalle = document.getElementById("detalle-mesa-liberar");
+
+    if (!selectMesa || !detalle) return;
+
+    const mesaSeleccionada = selectMesa.value;
+    const mesa = mesas.find((item) => item.id === mesaSeleccionada);
+
+    if (!mesa) {
+        detalle.textContent = "Selecciona una mesa para ver su información.";
+        return;
+    }
+
+    detalle.textContent =
+        `Mesa ${mesa.id} | Capacidad: ${mesa.capacidad} personas | Zona: ${mesa.zona} | ` +
+        `Personas actuales: ${mesa.personasActuales || "No registrado"}`;
 }
 
 function guardarNuevaReservacion(event) {
@@ -391,6 +456,51 @@ function guardarAsignacionMesa(event) {
     alert(`La mesa ${mesa.id} fue marcada como ocupada.`);
 }
 
+function guardarLiberacionMesa(event) {
+    event.preventDefault();
+
+    const mesaSeleccionada = document.getElementById("mesa-liberar").value;
+    const notas = document.getElementById("notas-liberar").value.trim();
+
+    if (!mesaSeleccionada) {
+        alert("Selecciona una mesa ocupada para liberarla.");
+        return;
+    }
+
+    const mesa = mesas.find((item) => item.id === mesaSeleccionada);
+
+    if (!mesa) {
+        alert("No se encontró la mesa seleccionada.");
+        return;
+    }
+
+    if (mesa.estado !== "ocupada") {
+        alert("Solo se pueden liberar mesas ocupadas.");
+        actualizarSistema();
+        return;
+    }
+
+    const confirmar = confirm(`¿Deseas liberar la mesa ${mesa.id}?`);
+
+    if (!confirmar) return;
+
+    mesa.estado = "disponible";
+    mesa.personasActuales = 0;
+    mesa.notas = notas || "Mesa liberada.";
+
+    document.getElementById("form-liberar-mesa").reset();
+
+    const detalle = document.getElementById("detalle-mesa-liberar");
+    if (detalle) {
+        detalle.textContent = "Selecciona una mesa para ver su información.";
+    }
+
+    actualizarSistema();
+    cambiarPantalla("pantalla-dashboard");
+
+    alert(`La mesa ${mesa.id} fue liberada correctamente.`);
+}
+
 function actualizarSistema() {
     renderizarResumen();
     renderizarMesas();
@@ -398,7 +508,9 @@ function actualizarSistema() {
     renderizarTablaReservaciones();
     renderizarSelectMesas();
     renderizarSelectAsignarMesa();
+    renderizarSelectLiberarMesa();
     renderizarMiniMapaReservacion();
     renderizarMiniMapaAsignar();
+    renderizarMiniMapaLiberar();
     actualizarHora();
 }

@@ -289,6 +289,58 @@
                 </div>
             </section>
 
+            <!-- PANTALLA: LIBERAR MESA -->
+            <section id="pantalla-liberar" class="screen">
+                <h2>Liberar mesa</h2>
+
+                <div class="section-header">
+                    <p>Selecciona una mesa ocupada para cambiarla nuevamente a disponible.</p>
+                    <button class="secondary-btn" id="btn-volver-dashboard-liberar">Volver al dashboard</button>
+                </div>
+
+                <div class="form-layout">
+
+                    <form class="form-card" id="form-liberar-mesa">
+
+                        <div class="form-group">
+                            <label for="mesa-liberar">Mesa ocupada</label>
+                            <select id="mesa-liberar" required>
+                                <option value="">Selecciona una mesa ocupada</option>
+                            </select>
+                        </div>
+
+                        <div class="suggestion-box" id="detalle-mesa-liberar">
+                            Selecciona una mesa para ver su información.
+                        </div>
+
+                        <div class="form-group">
+                            <label for="notas-liberar">Notas opcionales</label>
+                            <textarea id="notas-liberar"
+                                placeholder="Ej. Mesa limpiada y lista para nuevos clientes."></textarea>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="primary-btn">Liberar mesa</button>
+                            <button type="button" class="secondary-btn" id="btn-cancelar-liberar">Cancelar</button>
+                        </div>
+
+                    </form>
+
+                    <aside class="map-card mini-map-card">
+                        <h3>Mesas ocupadas</h3>
+
+                        <div class="tables-map mini-map" id="mini-map-liberar"></div>
+
+                        <div class="legend">
+                            <span><i class="dot available-dot"></i> Disponible</span>
+                            <span><i class="dot occupied-dot"></i> Ocupada</span>
+                            <span><i class="dot reserved-dot"></i> Reservada</span>
+                        </div>
+                    </aside>
+
+                </div>
+            </section>
+
             <!-- PANTALLA: ADMINISTRACIÓN DE MESAS -->
             <section id="pantalla-admin-mesas" class="screen">
                 <h2>Administración de mesas</h2>

@@ -196,6 +196,12 @@ body {
     font-size: 22px;
     font-weight: bold;
     cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.table:hover {
+    transform: scale(1.04);
+    opacity: 0.9;
 }
 
 .table.available {

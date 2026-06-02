@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     activarBotones();
     activarFormularioNuevaReservacion();
     activarFormularioAsignarMesa();
+    activarFormularioLiberarMesa();
 
     console.log("MesaLista cargado correctamente");
 });
@@ -61,6 +62,10 @@ function activarBotones() {
     const btnVolverDashboard = document.getElementById("btn-volver-dashboard");
     const btnCancelarAsignar = document.getElementById("btn-cancelar-asignar");
 
+    const btnLiberarRapido = document.getElementById("btn-liberar-rapido");
+    const btnVolverDashboardLiberar = document.getElementById("btn-volver-dashboard-liberar");
+    const btnCancelarLiberar = document.getElementById("btn-cancelar-liberar");
+
     if (btnNuevaReservacion) {
         btnNuevaReservacion.addEventListener("click", () => {
             cambiarPantalla("pantalla-nueva-reservacion");
@@ -114,6 +119,30 @@ function activarBotones() {
             cambiarPantalla("pantalla-dashboard");
         });
     }
+
+    if (btnLiberarRapido) {
+        btnLiberarRapido.addEventListener("click", () => {
+            cambiarPantalla("pantalla-liberar");
+        });
+    }
+
+    if (btnVolverDashboardLiberar) {
+        btnVolverDashboardLiberar.addEventListener("click", () => {
+            cambiarPantalla("pantalla-dashboard");
+        });
+    }
+
+    if (btnCancelarLiberar) {
+        btnCancelarLiberar.addEventListener("click", () => {
+            const form = document.getElementById("form-liberar-mesa");
+
+            if (form) {
+                form.reset();
+            }
+
+            cambiarPantalla("pantalla-dashboard");
+        });
+    }
 }
 
 function activarFormularioNuevaReservacion() {
@@ -139,5 +168,18 @@ function activarFormularioAsignarMesa() {
 
     if (inputPersonas) {
         inputPersonas.addEventListener("input", actualizarSugerenciaAsignar);
+    }
+}
+
+function activarFormularioLiberarMesa() {
+    const form = document.getElementById("form-liberar-mesa");
+    const selectMesa = document.getElementById("mesa-liberar");
+
+    if (form) {
+        form.addEventListener("submit", guardarLiberacionMesa);
+    }
+
+    if (selectMesa) {
+        selectMesa.addEventListener("change", actualizarDetalleLiberar);
     }
 }
