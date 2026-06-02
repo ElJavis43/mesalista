@@ -1,5 +1,3 @@
-const historialMovimientos = [];
-
 function agregarHistorial(tipo, descripcion) {
     historialMovimientos.unshift({
         id: Date.now(),
@@ -81,13 +79,15 @@ function renderizarMesas() {
 
 function mostrarDetalleMesa(mesa) {
     const personas = mesa.personasActuales ? `\nPersonas actuales: ${mesa.personasActuales}` : "";
+    const notas = mesa.notas ? `\nNotas: ${mesa.notas}` : "";
 
     alert(
         `Mesa: ${mesa.id}\n` +
         `Capacidad: ${mesa.capacidad} personas\n` +
         `Zona: ${mesa.zona}\n` +
         `Estado: ${mesa.estado}` +
-        personas
+        personas +
+        notas
     );
 }
 
@@ -436,6 +436,8 @@ function guardarNuevaReservacion(event) {
 
     agregarHistorial("Reservación", `Se registró una reservación para ${cliente} en la mesa ${mesaSeleccionada}.`);
 
+    guardarDatos();
+
     document.getElementById("form-nueva-reservacion").reset();
 
     actualizarSistema();
@@ -484,6 +486,8 @@ function guardarAsignacionMesa(event) {
 
     agregarHistorial("Ocupación", `La mesa ${mesa.id} fue ocupada por ${personas} personas.`);
 
+    guardarDatos();
+
     document.getElementById("form-asignar-mesa").reset();
 
     actualizarSistema();
@@ -525,6 +529,8 @@ function guardarLiberacionMesa(event) {
     mesa.notas = notas || "Mesa liberada.";
 
     agregarHistorial("Liberación", `La mesa ${mesa.id} fue liberada y quedó disponible.`);
+
+    guardarDatos();
 
     document.getElementById("form-liberar-mesa").reset();
 
@@ -604,7 +610,8 @@ function guardarMesaAdmin(event) {
             zona: zona,
             estado: estado,
             descripcion: descripcion,
-            personasActuales: estado === "ocupada" ? capacidad : 0
+            personasActuales: estado === "ocupada" ? capacidad : 0,
+            notas: ""
         });
 
         agregarHistorial("Administración", `Se agregó la mesa ${id}.`);
@@ -646,6 +653,7 @@ function guardarMesaAdmin(event) {
         alert("Mesa editada correctamente.");
     }
 
+    guardarDatos();
     limpiarFormularioMesa();
     actualizarSistema();
 }
@@ -704,6 +712,8 @@ function eliminarMesa(id) {
     }
 
     agregarHistorial("Administración", `Se eliminó la mesa ${id}.`);
+
+    guardarDatos();
 
     limpiarFormularioMesa();
     actualizarSistema();
@@ -877,7 +887,7 @@ function renderizarHistorial() {
     contenedor.innerHTML = "";
 
     if (historialMovimientos.length === 0) {
-        contenedor.innerHTML = `<p class="empty-history">Aún no hay movimientos registrados en esta sesión.</p>`;
+        contenedor.innerHTML = `<p class="empty-history">Aún no hay movimientos registrados.</p>`;
         return;
     }
 

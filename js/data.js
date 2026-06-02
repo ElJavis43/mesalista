@@ -1,67 +1,97 @@
-const mesas = [
+const MESAS_INICIALES = [
     {
         id: "M1",
         capacidad: 4,
         zona: "Terraza",
-        estado: "disponible"
+        estado: "disponible",
+        descripcion: "Mesa en terraza.",
+        personasActuales: 0,
+        notas: ""
     },
     {
         id: "M2",
         capacidad: 2,
         zona: "Terraza",
-        estado: "disponible"
+        estado: "disponible",
+        descripcion: "Mesa pequeña en terraza.",
+        personasActuales: 0,
+        notas: ""
     },
     {
         id: "M3",
         capacidad: 6,
         zona: "Interior",
-        estado: "reservada"
+        estado: "reservada",
+        descripcion: "Mesa amplia en zona interior.",
+        personasActuales: 0,
+        notas: ""
     },
     {
         id: "M4",
         capacidad: 4,
         zona: "Terraza",
-        estado: "disponible"
+        estado: "disponible",
+        descripcion: "Mesa estándar en terraza.",
+        personasActuales: 0,
+        notas: ""
     },
     {
         id: "M5",
         capacidad: 8,
         zona: "Interior",
-        estado: "ocupada"
+        estado: "ocupada",
+        descripcion: "Mesa familiar en interior.",
+        personasActuales: 8,
+        notas: "Mesa ocupada inicialmente."
     },
     {
         id: "M6",
         capacidad: 4,
         zona: "Terraza",
-        estado: "disponible"
+        estado: "disponible",
+        descripcion: "Mesa en terraza.",
+        personasActuales: 0,
+        notas: ""
     },
     {
         id: "M7",
         capacidad: 2,
         zona: "Bar",
-        estado: "reservada"
+        estado: "reservada",
+        descripcion: "Mesa pequeña cerca del bar.",
+        personasActuales: 0,
+        notas: ""
     },
     {
         id: "M8",
         capacidad: 6,
         zona: "Bar",
-        estado: "disponible"
+        estado: "disponible",
+        descripcion: "Mesa grande en zona de bar.",
+        personasActuales: 0,
+        notas: ""
     },
     {
         id: "M9",
         capacidad: 4,
         zona: "Bar",
-        estado: "disponible"
+        estado: "disponible",
+        descripcion: "Mesa estándar en zona de bar.",
+        personasActuales: 0,
+        notas: ""
     },
     {
         id: "M10",
         capacidad: 6,
         zona: "Interior",
-        estado: "ocupada"
+        estado: "ocupada",
+        descripcion: "Mesa interior.",
+        personasActuales: 6,
+        notas: "Mesa ocupada inicialmente."
     }
 ];
 
-const reservaciones = [
+const RESERVACIONES_INICIALES = [
     {
         id: 1,
         cliente: "María López",
@@ -118,3 +148,51 @@ const reservaciones = [
         notas: ""
     }
 ];
+
+const HISTORIAL_INICIAL = [];
+
+let mesas = cargarDesdeLocalStorage("mesalista_mesas", MESAS_INICIALES);
+let reservaciones = cargarDesdeLocalStorage("mesalista_reservaciones", RESERVACIONES_INICIALES);
+let historialMovimientos = cargarDesdeLocalStorage("mesalista_historial", HISTORIAL_INICIAL);
+
+function cargarDesdeLocalStorage(clave, valorInicial) {
+    const datosGuardados = localStorage.getItem(clave);
+
+    if (!datosGuardados) {
+        return structuredClone(valorInicial);
+    }
+
+    try {
+        return JSON.parse(datosGuardados);
+    } catch (error) {
+        console.error(`Error al cargar ${clave}:`, error);
+        return structuredClone(valorInicial);
+    }
+}
+
+function guardarDatos() {
+    localStorage.setItem("mesalista_mesas", JSON.stringify(mesas));
+    localStorage.setItem("mesalista_reservaciones", JSON.stringify(reservaciones));
+    localStorage.setItem("mesalista_historial", JSON.stringify(historialMovimientos));
+}
+
+function reiniciarDatos() {
+    const confirmar = confirm(
+        "¿Deseas reiniciar todos los datos del sistema? Se perderán los cambios guardados."
+    );
+
+    if (!confirmar) return;
+
+    localStorage.removeItem("mesalista_mesas");
+    localStorage.removeItem("mesalista_reservaciones");
+    localStorage.removeItem("mesalista_historial");
+
+    mesas = structuredClone(MESAS_INICIALES);
+    reservaciones = structuredClone(RESERVACIONES_INICIALES);
+    historialMovimientos = structuredClone(HISTORIAL_INICIAL);
+
+    guardarDatos();
+    actualizarSistema();
+
+    alert("Los datos fueron reiniciados correctamente.");
+}
