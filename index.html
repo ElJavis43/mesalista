@@ -432,7 +432,73 @@
             <!-- PANTALLA: REPORTES -->
             <section id="pantalla-reportes" class="screen">
                 <h2>Reportes e historial</h2>
-                <p>Esta pantalla se desarrollará más adelante.</p>
+
+                <div class="section-header">
+                    <p>Consulta indicadores básicos sobre ocupación, reservaciones y uso de mesas.</p>
+                    <button class="secondary-btn" id="btn-actualizar-reportes">Actualizar reportes</button>
+                </div>
+
+                <div class="cards">
+                    <div class="card occupied">
+                        <p>Ocupación promedio</p>
+                        <h3 id="reporte-ocupacion-promedio">0%</h3>
+                    </div>
+
+                    <div class="card reserved">
+                        <p>Reservaciones registradas</p>
+                        <h3 id="reporte-total-reservaciones">0</h3>
+                    </div>
+
+                    <div class="card neutral">
+                        <p>Tiempo promedio de espera</p>
+                        <h3 id="reporte-tiempo-espera">15 min</h3>
+                    </div>
+
+                    <div class="card available">
+                        <p>Mesas disponibles ahora</p>
+                        <h3 id="reporte-mesas-disponibles">0</h3>
+                    </div>
+                </div>
+
+                <div class="reports-grid">
+                    <section class="report-card">
+                        <h3>Ocupación por día</h3>
+                        <div class="bar-chart" id="grafica-ocupacion-dia"></div>
+                    </section>
+
+                    <section class="report-card">
+                        <h3>Mesas más usadas</h3>
+                        <table class="data-table compact-table">
+                            <thead>
+                                <tr>
+                                    <th>Mesa</th>
+                                    <th>Veces usada</th>
+                                    <th>% de uso</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabla-mesas-usadas"></tbody>
+                        </table>
+                    </section>
+
+                    <section class="report-card">
+                        <h3>Reservaciones por hora</h3>
+                        <table class="data-table compact-table">
+                            <thead>
+                                <tr>
+                                    <th>Hora</th>
+                                    <th>Reservaciones</th>
+                                    <th>Personas</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabla-reservaciones-hora"></tbody>
+                        </table>
+                    </section>
+
+                    <section class="report-card">
+                        <h3>Historial de movimientos</h3>
+                        <div class="history-list" id="historial-movimientos"></div>
+                    </section>
+                </div>
             </section>
 
         </main>

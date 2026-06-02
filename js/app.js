@@ -70,6 +70,8 @@ function activarBotones() {
     const btnLimpiarMesa = document.getElementById("btn-limpiar-form-mesa");
     const btnCancelarEdicionMesa = document.getElementById("btn-cancelar-edicion-mesa");
 
+    const btnActualizarReportes = document.getElementById("btn-actualizar-reportes");
+
     if (btnNuevaReservacion) {
         btnNuevaReservacion.addEventListener("click", () => {
             cambiarPantalla("pantalla-nueva-reservacion");
@@ -154,6 +156,13 @@ function activarBotones() {
 
     if (btnCancelarEdicionMesa) {
         btnCancelarEdicionMesa.addEventListener("click", limpiarFormularioMesa);
+    }
+
+    if (btnActualizarReportes) {
+        btnActualizarReportes.addEventListener("click", () => {
+            renderizarReportes();
+            alert("Reportes actualizados.");
+        });
     }
 }
 

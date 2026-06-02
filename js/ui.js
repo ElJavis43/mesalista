@@ -1,3 +1,18 @@
+const historialMovimientos = [];
+
+function agregarHistorial(tipo, descripcion) {
+    historialMovimientos.unshift({
+        id: Date.now(),
+        tipo: tipo,
+        descripcion: descripcion,
+        fecha: new Date().toLocaleString("es-MX")
+    });
+
+    if (historialMovimientos.length > 10) {
+        historialMovimientos.pop();
+    }
+}
+
 function obtenerClaseEstado(estado) {
     if (estado === "disponible") return "available";
     if (estado === "ocupada") return "occupied";
@@ -417,8 +432,9 @@ function guardarNuevaReservacion(event) {
     };
 
     reservaciones.push(nuevaReservacion);
-
     mesa.estado = "reservada";
+
+    agregarHistorial("Reservación", `Se registró una reservación para ${cliente} en la mesa ${mesaSeleccionada}.`);
 
     document.getElementById("form-nueva-reservacion").reset();
 
@@ -466,6 +482,8 @@ function guardarAsignacionMesa(event) {
     mesa.personasActuales = personas;
     mesa.notas = notas;
 
+    agregarHistorial("Ocupación", `La mesa ${mesa.id} fue ocupada por ${personas} personas.`);
+
     document.getElementById("form-asignar-mesa").reset();
 
     actualizarSistema();
@@ -505,6 +523,8 @@ function guardarLiberacionMesa(event) {
     mesa.estado = "disponible";
     mesa.personasActuales = 0;
     mesa.notas = notas || "Mesa liberada.";
+
+    agregarHistorial("Liberación", `La mesa ${mesa.id} fue liberada y quedó disponible.`);
 
     document.getElementById("form-liberar-mesa").reset();
 
@@ -587,6 +607,8 @@ function guardarMesaAdmin(event) {
             personasActuales: estado === "ocupada" ? capacidad : 0
         });
 
+        agregarHistorial("Administración", `Se agregó la mesa ${id}.`);
+
         alert("Mesa agregada correctamente.");
     } else {
         const mesa = mesas.find((item) => item.id === modo);
@@ -618,6 +640,8 @@ function guardarMesaAdmin(event) {
                 reservacion.mesa = id;
             }
         });
+
+        agregarHistorial("Administración", `Se editó la mesa ${id}.`);
 
         alert("Mesa editada correctamente.");
     }
@@ -679,6 +703,8 @@ function eliminarMesa(id) {
         mesas.splice(indice, 1);
     }
 
+    agregarHistorial("Administración", `Se eliminó la mesa ${id}.`);
+
     limpiarFormularioMesa();
     actualizarSistema();
 
@@ -704,6 +730,171 @@ function limpiarFormularioMesa() {
     }
 }
 
+function calcularOcupacionPromedio() {
+    if (mesas.length === 0) return 0;
+
+    const ocupadas = mesas.filter((mesa) => mesa.estado === "ocupada" || mesa.estado === "reservada").length;
+    return Math.round((ocupadas / mesas.length) * 100);
+}
+
+function renderizarReportes() {
+    const ocupacion = calcularOcupacionPromedio();
+    const disponibles = contarMesasPorEstado("disponible");
+
+    const reporteOcupacion = document.getElementById("reporte-ocupacion-promedio");
+    const reporteReservaciones = document.getElementById("reporte-total-reservaciones");
+    const reporteTiempo = document.getElementById("reporte-tiempo-espera");
+    const reporteDisponibles = document.getElementById("reporte-mesas-disponibles");
+
+    if (reporteOcupacion) reporteOcupacion.textContent = `${ocupacion}%`;
+    if (reporteReservaciones) reporteReservaciones.textContent = reservaciones.length;
+    if (reporteTiempo) reporteTiempo.textContent = `${calcularTiempoEspera()} min`;
+    if (reporteDisponibles) reporteDisponibles.textContent = disponibles;
+
+    renderizarGraficaOcupacion();
+    renderizarMesasMasUsadas();
+    renderizarReservacionesPorHora();
+    renderizarHistorial();
+}
+
+function calcularTiempoEspera() {
+    const ocupacion = calcularOcupacionPromedio();
+
+    if (ocupacion >= 90) return 30;
+    if (ocupacion >= 70) return 20;
+    if (ocupacion >= 50) return 15;
+    if (ocupacion >= 30) return 10;
+
+    return 5;
+}
+
+function renderizarGraficaOcupacion() {
+    const contenedor = document.getElementById("grafica-ocupacion-dia");
+
+    if (!contenedor) return;
+
+    const datos = [
+        { dia: "Lun", valor: 45 },
+        { dia: "Mar", valor: 55 },
+        { dia: "Mié", valor: 60 },
+        { dia: "Jue", valor: 68 },
+        { dia: "Vie", valor: 75 },
+        { dia: "Sáb", valor: calcularOcupacionPromedio() },
+        { dia: "Dom", valor: 50 }
+    ];
+
+    contenedor.innerHTML = "";
+
+    datos.forEach((item) => {
+        const barra = document.createElement("div");
+        barra.className = "bar-item";
+
+        barra.innerHTML = `
+      <div class="bar-value">${item.valor}%</div>
+      <div class="bar">
+        <div class="bar-fill" style="height: ${item.valor}%;"></div>
+      </div>
+      <span>${item.dia}</span>
+    `;
+
+        contenedor.appendChild(barra);
+    });
+}
+
+function renderizarMesasMasUsadas() {
+    const tabla = document.getElementById("tabla-mesas-usadas");
+
+    if (!tabla) return;
+
+    tabla.innerHTML = "";
+
+    const usoMesas = mesas.map((mesa) => {
+        const reservacionesMesa = reservaciones.filter((reservacion) => reservacion.mesa === mesa.id).length;
+        const ocupacionExtra = mesa.estado === "ocupada" ? 1 : 0;
+
+        return {
+            id: mesa.id,
+            veces: reservacionesMesa + ocupacionExtra,
+            porcentaje: Math.round(((reservacionesMesa + ocupacionExtra) / Math.max(reservaciones.length, 1)) * 100)
+        };
+    });
+
+    usoMesas
+        .sort((a, b) => b.veces - a.veces)
+        .slice(0, 5)
+        .forEach((mesa) => {
+            const fila = document.createElement("tr");
+
+            fila.innerHTML = `
+        <td>${mesa.id}</td>
+        <td>${mesa.veces}</td>
+        <td>${mesa.porcentaje}%</td>
+      `;
+
+            tabla.appendChild(fila);
+        });
+}
+
+function renderizarReservacionesPorHora() {
+    const tabla = document.getElementById("tabla-reservaciones-hora");
+
+    if (!tabla) return;
+
+    tabla.innerHTML = "";
+
+    const grupos = {};
+
+    reservaciones.forEach((reservacion) => {
+        if (!grupos[reservacion.hora]) {
+            grupos[reservacion.hora] = {
+                reservaciones: 0,
+                personas: 0
+            };
+        }
+
+        grupos[reservacion.hora].reservaciones += 1;
+        grupos[reservacion.hora].personas += Number(reservacion.personas);
+    });
+
+    Object.keys(grupos).sort().forEach((hora) => {
+        const fila = document.createElement("tr");
+
+        fila.innerHTML = `
+      <td>${hora}</td>
+      <td>${grupos[hora].reservaciones}</td>
+      <td>${grupos[hora].personas}</td>
+    `;
+
+        tabla.appendChild(fila);
+    });
+}
+
+function renderizarHistorial() {
+    const contenedor = document.getElementById("historial-movimientos");
+
+    if (!contenedor) return;
+
+    contenedor.innerHTML = "";
+
+    if (historialMovimientos.length === 0) {
+        contenedor.innerHTML = `<p class="empty-history">Aún no hay movimientos registrados en esta sesión.</p>`;
+        return;
+    }
+
+    historialMovimientos.forEach((movimiento) => {
+        const item = document.createElement("div");
+        item.className = "history-item";
+
+        item.innerHTML = `
+      <strong>${movimiento.tipo}</strong>
+      <p>${movimiento.descripcion}</p>
+      <small>${movimiento.fecha}</small>
+    `;
+
+        contenedor.appendChild(item);
+    });
+}
+
 function actualizarSistema() {
     renderizarResumen();
     renderizarMesas();
@@ -717,5 +908,6 @@ function actualizarSistema() {
     renderizarMiniMapaLiberar();
     renderizarMiniMapaAdmin();
     renderizarTablaAdminMesas();
+    renderizarReportes();
     actualizarHora();
 }
