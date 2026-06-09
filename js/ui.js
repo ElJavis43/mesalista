@@ -119,6 +119,19 @@ function renderizarTablaReservaciones(lista = reservaciones) {
 
     tabla.innerHTML = "";
 
+    if (lista.length === 0) {
+        const filaVacia = document.createElement("tr");
+
+        filaVacia.innerHTML = `
+      <td colspan="7" class="empty-row">
+        No se encontraron reservaciones con los filtros aplicados.
+      </td>
+    `;
+
+        tabla.appendChild(filaVacia);
+        return;
+    }
+
     lista.forEach((reservacion) => {
         const fila = document.createElement("tr");
 
@@ -159,6 +172,56 @@ function verReservacion(id) {
         `Estado: ${reservacion.estado}\n` +
         `Notas: ${reservacion.notas || "Sin notas"}`
     );
+}
+
+function aplicarFiltrosReservaciones() {
+    const filtroFecha = document.getElementById("filtro-fecha");
+    const filtroEstado = document.getElementById("filtro-estado");
+    const filtroBusqueda = document.getElementById("filtro-busqueda");
+
+    if (!filtroFecha || !filtroEstado || !filtroBusqueda) return;
+
+    const fecha = filtroFecha.value;
+    const estado = filtroEstado.value;
+    const busqueda = filtroBusqueda.value.trim().toLowerCase();
+
+    let resultado = [...reservaciones];
+
+    if (fecha) {
+        resultado = resultado.filter((reservacion) => reservacion.fecha === fecha);
+    }
+
+    if (estado !== "todos") {
+        resultado = resultado.filter((reservacion) => reservacion.estado === estado);
+    }
+
+    if (busqueda) {
+        resultado = resultado.filter((reservacion) => {
+            const cliente = reservacion.cliente.toLowerCase();
+            const telefono = reservacion.telefono.toLowerCase();
+            const mesa = reservacion.mesa.toLowerCase();
+
+            return (
+                cliente.includes(busqueda) ||
+                telefono.includes(busqueda) ||
+                mesa.includes(busqueda)
+            );
+        });
+    }
+
+    renderizarTablaReservaciones(resultado);
+}
+
+function limpiarFiltrosReservaciones() {
+    const filtroFecha = document.getElementById("filtro-fecha");
+    const filtroEstado = document.getElementById("filtro-estado");
+    const filtroBusqueda = document.getElementById("filtro-busqueda");
+
+    if (filtroFecha) filtroFecha.value = "";
+    if (filtroEstado) filtroEstado.value = "todos";
+    if (filtroBusqueda) filtroBusqueda.value = "";
+
+    renderizarTablaReservaciones();
 }
 
 function renderizarSelectMesas() {
@@ -440,6 +503,7 @@ function guardarNuevaReservacion(event) {
 
     document.getElementById("form-nueva-reservacion").reset();
 
+    limpiarFiltrosReservaciones();
     actualizarSistema();
     cambiarPantalla("pantalla-reservaciones");
 
@@ -909,7 +973,7 @@ function actualizarSistema() {
     renderizarResumen();
     renderizarMesas();
     renderizarReservaciones();
-    renderizarTablaReservaciones();
+    aplicarFiltrosReservaciones();
     renderizarSelectMesas();
     renderizarSelectAsignarMesa();
     renderizarSelectLiberarMesa();

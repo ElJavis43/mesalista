@@ -586,3 +586,10 @@ body {
         width: 28px;
     }
 }
+
+.empty-row {
+    text-align: center;
+    color: var(--gris);
+    font-weight: bold;
+    padding: 28px;
+}

@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
     activarFormularioAsignarMesa();
     activarFormularioLiberarMesa();
     activarFormularioAdminMesas();
+    activarFiltrosReservaciones();
 
     console.log("MesaLista cargado correctamente");
 });
@@ -210,5 +211,23 @@ function activarFormularioAdminMesas() {
 
     if (form) {
         form.addEventListener("submit", guardarMesaAdmin);
+    }
+}
+
+function activarFiltrosReservaciones() {
+    const filtroFecha = document.getElementById("filtro-fecha");
+    const filtroEstado = document.getElementById("filtro-estado");
+    const filtroBusqueda = document.getElementById("filtro-busqueda");
+
+    if (filtroFecha) {
+        filtroFecha.addEventListener("change", aplicarFiltrosReservaciones);
+    }
+
+    if (filtroEstado) {
+        filtroEstado.addEventListener("change", aplicarFiltrosReservaciones);
+    }
+
+    if (filtroBusqueda) {
+        filtroBusqueda.addEventListener("input", aplicarFiltrosReservaciones);
     }
 }
