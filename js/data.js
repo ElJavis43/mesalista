@@ -155,25 +155,37 @@ let mesas = cargarDesdeLocalStorage("mesalista_mesas", MESAS_INICIALES);
 let reservaciones = cargarDesdeLocalStorage("mesalista_reservaciones", RESERVACIONES_INICIALES);
 let historialMovimientos = cargarDesdeLocalStorage("mesalista_historial", HISTORIAL_INICIAL);
 
+function copiarDatos(datos) {
+    return JSON.parse(JSON.stringify(datos));
+}
+
 function cargarDesdeLocalStorage(clave, valorInicial) {
     const datosGuardados = localStorage.getItem(clave);
 
     if (!datosGuardados) {
-        return structuredClone(valorInicial);
+        return copiarDatos(valorInicial);
     }
 
     try {
         return JSON.parse(datosGuardados);
     } catch (error) {
         console.error(`Error al cargar ${clave}:`, error);
-        return structuredClone(valorInicial);
+        return copiarDatos(valorInicial);
     }
 }
 
-function guardarDatos() {
+function guardarDatosLocales() {
     localStorage.setItem("mesalista_mesas", JSON.stringify(mesas));
     localStorage.setItem("mesalista_reservaciones", JSON.stringify(reservaciones));
     localStorage.setItem("mesalista_historial", JSON.stringify(historialMovimientos));
+}
+
+function guardarDatos() {
+    guardarDatosLocales();
+
+    if (typeof guardarDatosFirebase === "function") {
+        guardarDatosFirebase();
+    }
 }
 
 function reiniciarDatos() {
@@ -187,12 +199,15 @@ function reiniciarDatos() {
     localStorage.removeItem("mesalista_reservaciones");
     localStorage.removeItem("mesalista_historial");
 
-    mesas = structuredClone(MESAS_INICIALES);
-    reservaciones = structuredClone(RESERVACIONES_INICIALES);
-    historialMovimientos = structuredClone(HISTORIAL_INICIAL);
+    mesas = copiarDatos(MESAS_INICIALES);
+    reservaciones = copiarDatos(RESERVACIONES_INICIALES);
+    historialMovimientos = copiarDatos(HISTORIAL_INICIAL);
 
     guardarDatos();
-    actualizarSistema();
+
+    if (typeof actualizarSistema === "function") {
+        actualizarSistema();
+    }
 
     alert("Los datos fueron reiniciados correctamente.");
 }

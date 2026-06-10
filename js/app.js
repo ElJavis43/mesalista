@@ -1,4 +1,14 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+    await iniciarSistema();
+
+    console.log("MesaLista cargado correctamente");
+});
+
+async function iniciarSistema() {
+    if (typeof iniciarFirebaseDatos === "function") {
+        await iniciarFirebaseDatos();
+    }
+
     actualizarSistema();
     activarNavegacion();
     activarBotones();
@@ -7,9 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
     activarFormularioLiberarMesa();
     activarFormularioAdminMesas();
     activarFiltrosReservaciones();
-
-    console.log("MesaLista cargado correctamente");
-});
+}
 
 function activarNavegacion() {
     const menuItems = document.querySelectorAll(".menu-item");
