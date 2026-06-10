@@ -135,6 +135,24 @@ function renderizarTablaReservaciones(lista = reservaciones) {
     lista.forEach((reservacion) => {
         const fila = document.createElement("tr");
 
+        let botonesAcciones = `
+      <button class="action-btn" onclick="verReservacion(${reservacion.id})">
+        Ver
+      </button>
+    `;
+
+        if (reservacion.estado !== "cancelada") {
+            botonesAcciones += `
+        <button class="action-btn" onclick="ocuparMesaReservacion(${reservacion.id})">
+          Ocupar
+        </button>
+
+        <button class="action-btn danger-action" onclick="cancelarReservacion(${reservacion.id})">
+          Cancelar
+        </button>
+      `;
+        }
+
         fila.innerHTML = `
       <td>${reservacion.cliente}</td>
       <td>${reservacion.fecha}</td>
@@ -146,10 +164,8 @@ function renderizarTablaReservaciones(lista = reservaciones) {
           ${reservacion.estado}
         </span>
       </td>
-      <td>
-        <button class="action-btn" onclick="verReservacion(${reservacion.id})">
-          Ver
-        </button>
+      <td class="acciones-reservacion">
+        ${botonesAcciones}
       </td>
     `;
 
@@ -172,6 +188,104 @@ function verReservacion(id) {
         `Estado: ${reservacion.estado}\n` +
         `Notas: ${reservacion.notas || "Sin notas"}`
     );
+}
+
+function ocuparMesaReservacion(id) {
+    const reservacion = reservaciones.find((item) => item.id === id);
+
+    if (!reservacion) {
+        alert("No se encontró la reservación.");
+        return;
+    }
+
+    if (reservacion.estado === "cancelada") {
+        alert("No se puede ocupar una reservación cancelada.");
+        return;
+    }
+
+    const mesa = mesas.find((item) => item.id === reservacion.mesa);
+
+    if (!mesa) {
+        alert("No se encontró la mesa asignada a esta reservación.");
+        return;
+    }
+
+    if (mesa.estado === "ocupada") {
+        const confirmarOcupada = confirm(
+            `La mesa ${mesa.id} ya aparece como ocupada. ¿Deseas mantener la reservación como confirmada?`
+        );
+
+        if (!confirmarOcupada) return;
+
+        reservacion.estado = "confirmada";
+
+        guardarDatos();
+        actualizarSistema();
+
+        alert("La reservación quedó como confirmada.");
+        return;
+    }
+
+    const confirmar = confirm(
+        `¿Deseas marcar la mesa ${mesa.id} como ocupada para ${reservacion.cliente}?`
+    );
+
+    if (!confirmar) return;
+
+    reservacion.estado = "confirmada";
+    mesa.estado = "ocupada";
+    mesa.personasActuales = reservacion.personas;
+    mesa.notas = `Ocupada por reservación de ${reservacion.cliente}.`;
+
+    agregarHistorial(
+        "Reservación",
+        `La reservación de ${reservacion.cliente} pasó a ocupar la mesa ${mesa.id}.`
+    );
+
+    guardarDatos();
+    actualizarSistema();
+
+    alert(`La mesa ${mesa.id} ahora está ocupada.`);
+}
+
+function cancelarReservacion(id) {
+    const reservacion = reservaciones.find((item) => item.id === id);
+
+    if (!reservacion) {
+        alert("No se encontró la reservación.");
+        return;
+    }
+
+    if (reservacion.estado === "cancelada") {
+        alert("Esta reservación ya está cancelada.");
+        return;
+    }
+
+    const confirmar = confirm(
+        `¿Deseas cancelar la reservación de ${reservacion.cliente}?`
+    );
+
+    if (!confirmar) return;
+
+    const mesa = mesas.find((item) => item.id === reservacion.mesa);
+
+    reservacion.estado = "cancelada";
+
+    if (mesa && mesa.estado === "reservada") {
+        mesa.estado = "disponible";
+        mesa.personasActuales = 0;
+        mesa.notas = "Mesa liberada por cancelación de reservación.";
+    }
+
+    agregarHistorial(
+        "Cancelación",
+        `Se canceló la reservación de ${reservacion.cliente}.`
+    );
+
+    guardarDatos();
+    actualizarSistema();
+
+    alert("Reservación cancelada correctamente.");
 }
 
 function aplicarFiltrosReservaciones() {

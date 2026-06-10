@@ -593,3 +593,9 @@ body {
     font-weight: bold;
     padding: 28px;
 }
+
+.acciones-reservacion {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
