@@ -599,3 +599,81 @@ body {
     gap: 8px;
     flex-wrap: wrap;
 }
+
+.app-locked {
+    display: none;
+}
+
+.login-screen {
+    min-height: 100vh;
+    background: var(--crema);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 430px;
+    background: white;
+    border: 1px solid var(--borde);
+    border-radius: 22px;
+    padding: 34px;
+    box-shadow: 0 12px 30px rgba(74, 44, 36, 0.12);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.login-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.login-logo h1 {
+    color: var(--cafe);
+    font-size: 32px;
+}
+
+.login-card h2 {
+    font-size: 28px;
+    color: var(--cafe);
+}
+
+.login-card p,
+.login-hint {
+    color: var(--gris);
+}
+
+.login-hint {
+    text-align: center;
+    margin-top: 8px;
+}
+
+.user-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.logout-btn {
+    background: white;
+    color: var(--rojo);
+    border: 1px solid rgba(201, 76, 76, 0.45);
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.logout-btn:hover {
+    background: rgba(201, 76, 76, 0.12);
+}
+
+.acciones-reservacion {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}

@@ -11,7 +11,36 @@
 
 <body>
 
-    <div class="app">
+    <!-- PANTALLA DE LOGIN -->
+    <section id="login-screen" class="login-screen">
+        <form id="form-login" class="login-card">
+            <div class="login-logo">
+                <span class="logo-icon">▥</span>
+                <h1>MesaLista</h1>
+            </div>
+
+            <h2>Iniciar sesión</h2>
+            <p>Ingresa tus datos para acceder al sistema.</p>
+
+            <div class="form-group">
+                <label for="login-usuario">Usuario</label>
+                <input type="text" id="login-usuario" placeholder="Usuario" required>
+            </div>
+
+            <div class="form-group">
+                <label for="login-password">Contraseña</label>
+                <input type="password" id="login-password" placeholder="Contraseña" required>
+            </div>
+
+            <button type="submit" class="primary-btn">Iniciar sesión</button>
+
+            <small class="login-hint">
+                Usuario: admin | Contraseña: 1234
+            </small>
+        </form>
+    </section>
+
+    <div class="app app-locked" id="app-shell">
 
         <aside class="sidebar">
             <div>
@@ -38,11 +67,17 @@
         <main class="main-content">
 
             <header class="topbar">
-                <input type="text" placeholder="Buscar reservación, cliente o mesa..." />
+                <input type="text" id="busqueda-global" placeholder="Buscar cliente, teléfono, mesa o estado..." />
 
-                <div class="user-info">
-                    <span>Juan Pérez</span>
-                    <small>Administrador</small>
+                <div class="user-actions">
+                    <div class="user-info">
+                        <span id="usuario-activo">Administrador</span>
+                        <small>MesaLista</small>
+                    </div>
+
+                    <button class="logout-btn" id="btn-cerrar-sesion">
+                        Cerrar sesión
+                    </button>
                 </div>
             </header>
 
@@ -110,7 +145,7 @@
                 <h2>Reservaciones</h2>
 
                 <div class="section-header">
-                    <p>Consulta, filtra y administra las reservaciones registradas.</p>
+                    <p>Consulta, filtra y administra las reservaciones pendientes.</p>
                     <button class="primary-btn" id="btn-ir-nueva-reservacion">+ Nueva reservación</button>
                 </div>
 
@@ -124,15 +159,13 @@
                         <label>Estado</label>
                         <select id="filtro-estado">
                             <option value="todos">Todos</option>
-                            <option value="confirmada">Confirmada</option>
                             <option value="en espera">En espera</option>
-                            <option value="cancelada">Cancelada</option>
                         </select>
                     </div>
 
                     <div class="filter-group large">
                         <label>Búsqueda</label>
-                        <input type="text" id="filtro-busqueda" placeholder="Buscar cliente o mesa...">
+                        <input type="text" id="filtro-busqueda" placeholder="Buscar cliente, teléfono o mesa...">
                     </div>
                 </div>
 
@@ -512,6 +545,7 @@
     <script src="js/data.js"></script>
     <script src="js/ui.js"></script>
     <script src="js/firebase-service.js"></script>
+    <script src="js/auth-search.js"></script>
     <script src="js/app.js"></script>
 </body>
 
